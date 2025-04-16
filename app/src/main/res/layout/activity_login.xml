@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/donthdavebutton"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
@@ -98,6 +98,7 @@
         android:layout_width="67dp"
         android:layout_height="17dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_bold"
         android:text="Or"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
@@ -109,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/lato_bold"
         android:text="Continue With"
         app:layout_constraintEnd_toEndOf="@+id/textView9"
         app:layout_constraintHorizontal_bias="0.4"
@@ -124,7 +126,7 @@
         android:background="@drawable/edittextshape"
         android:drawableLeft="@drawable/google"
         android:elevation="5dp"
-        android:fontFamily="sans-serif-black"
+        android:fontFamily="@font/yeonsung_regular"
         android:paddingLeft="15dp"
         android:text="Google"
         app:layout_constraintEnd_toStartOf="@+id/button2"
@@ -140,7 +142,7 @@
         android:layout_marginEnd="4dp"
         android:background="@drawable/whitebutton"
         android:drawableLeft="@drawable/facebook"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/yeonsung_regular"
         android:paddingLeft="15dp"
         android:text="Facebook"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +151,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button3"
+        android:id="@+id/loginbutton"
         android:layout_width="152dp"
         android:layout_height="57dp"
         android:layout_marginTop="16dp"
@@ -173,10 +175,10 @@
         android:text="Don't Have Account?"
         android:textColor="@color/textColor"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="@+id/loginbutton"
         app:layout_constraintHorizontal_bias="0.392"
-        app:layout_constraintStart_toStartOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintStart_toStartOf="@+id/loginbutton"
+        app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
 
     <TextView
         android:id="@+id/textView12"
