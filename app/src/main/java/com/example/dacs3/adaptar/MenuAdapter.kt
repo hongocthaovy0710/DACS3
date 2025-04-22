@@ -3,10 +3,9 @@ package com.example.dacs3.adaptar
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dacs3.databinding.FragmentMenuBootomSheetBinding
 import com.example.dacs3.databinding.MenuItemBinding
 
-class MenuAdapter(private val menuItemsName : MutableList<String>, private val menuItemPrice : MutableList<String>, private val MenuImage : MutableList<Int>) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
+class MenuAdapter(private val menuItemsName: List<String>, private val menuItemPrice: List<String>, private val MenuImage: List<Int>) : RecyclerView.Adapter<MenuAdapter.MenuViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
