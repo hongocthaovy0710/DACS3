@@ -154,7 +154,7 @@ for previewing layouts and visual " />
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button3"
+            android:id="@+id/addItemButton"
             android:elevation="5dp"
             android:background="@drawable/proceedbutonshape"
             android:layout_width="match_parent"
