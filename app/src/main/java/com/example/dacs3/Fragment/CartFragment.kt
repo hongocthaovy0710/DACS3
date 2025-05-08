@@ -33,11 +33,11 @@ class CartFragment : Fragment() {
     private lateinit var foodDescriptions: MutableList<String>
     private lateinit var foodImagesUri: MutableList<String>
     private lateinit var foodIngredients: MutableList<String>
-    private lateinit var quantity : MutableList<Int>
+    private lateinit var quantity: MutableList<Int>
     private lateinit var cartAdapter: CartAdapter
-    private lateinit var userId : String
+    private lateinit var userId: String
 
-    private  lateinit var binding: FragmentCartBinding
+    private lateinit var binding: FragmentCartBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,17 +55,77 @@ class CartFragment : Fragment() {
         retrieveCartItems()
 
 
+        binding.proceedButton.setOnClickListener {
+            getOrderItemsDetails()
 
-
-
-        binding.proceedButton.setOnClickListener{
-            val intent = Intent(requireContext(),PayOutActivity::class.java)
-            startActivity(intent)
         }
-
-
-
         return binding.root
+    }
+
+    private fun getOrderItemsDetails() {
+        val orderIdReference: DatabaseReference =
+            database.reference.child("user").child(userId).child("CartItems")
+        val foodName = mutableListOf<String>()
+        val foodPrice = mutableListOf<String>()
+        val foodImage = mutableListOf<String>()
+        val foodDescription = mutableListOf<String>()
+        val foodIngredient = mutableListOf<String>()
+
+        //get items Quantities
+        val foodQuantities = cartAdapter.getUpdatedItemsQuantities()
+        orderIdReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (foodSnapshot in snapshot.children) {
+                    val orderItems = foodSnapshot.getValue(CartItems::class.java)
+
+                    // add items details in to list
+                    orderItems?.foodName?.let { foodName.add(it) }
+                    orderItems?.foodPrice?.let { foodPrice.add(it) }
+                    orderItems?.foodDescription?.let { foodDescription.add(it) }
+                    orderItems?.foodImage?.let { foodImage.add(it) }
+                    orderItems?.foodIngredient?.let { foodIngredient.add(it) }
+
+                }
+                orderNow(
+                    foodName,
+                    foodPrice,
+                    foodImage,
+                    foodDescription,
+                    foodIngredient,
+                    foodQuantities
+                )
+            }
+
+            private fun orderNow(
+                foodName: MutableList<String>,
+                foodPrice: MutableList<String>,
+                foodImage: MutableList<String>,
+                foodDescription: MutableList<String>,
+                foodIngredient: MutableList<String>,
+                foodQuantities: MutableList<Int>
+            ) {
+                if (isAdded && context != null) {
+                    val intent = Intent(requireContext(), PayOutActivity::class.java)
+                    intent.putExtra("FoodItemName", foodName as ArrayList<String>)
+                    intent.putExtra("FoodItemPrice", foodPrice as ArrayList<String>)
+                    intent.putExtra("FoodItemImage", foodImage as ArrayList<String>)
+                    intent.putExtra("FoodItemDescription", foodDescription as ArrayList<String>)
+                    intent.putExtra("FoodItemIngredient", foodIngredient as ArrayList<String>)
+                    intent.putExtra("FoodItemQuantities", foodQuantities as ArrayList<Int>)
+                    startActivity(intent)
+                }
+
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(
+                    requireContext(),
+                    "Order making Failed. Please Try Again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 
     private fun retrieveCartItems() {
@@ -73,7 +133,8 @@ class CartFragment : Fragment() {
 
         database = FirebaseDatabase.getInstance()
         userId = auth.currentUser?.uid ?: ""
-        val foodReference : DatabaseReference = database.reference.child("user").child(userId).child("CartItems")
+        val foodReference: DatabaseReference =
+            database.reference.child("user").child(userId).child("CartItems")
 
 
         //list to store cart items
@@ -101,18 +162,27 @@ class CartFragment : Fragment() {
 
 
                 }
-                    setAdapter()
+                setAdapter()
 
             }
 
             private fun setAdapter() {
-                val adapter = CartAdapter(requireContext(), foodNames, foodPrices, foodImagesUri, foodDescriptions, quantity, foodIngredients)
-                binding.cartRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-                binding.cartRecyclerView.adapter = adapter
+               cartAdapter = CartAdapter(
+                    requireContext(),
+                    foodNames,
+                    foodPrices,
+                    foodImagesUri,
+                    foodDescriptions,
+                    quantity,
+                    foodIngredients
+                )
+                binding.cartRecyclerView.layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                binding.cartRecyclerView.adapter = cartAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
-                 Toast.makeText(context, "data not fetch", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "data not fetch", Toast.LENGTH_SHORT).show()
             }
 
 
