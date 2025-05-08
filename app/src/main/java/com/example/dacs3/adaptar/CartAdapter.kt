@@ -83,8 +83,18 @@ class CartAdapter(
                 //load image using glide
                 val uriString = cartImages[position]
 
-                val uri = Uri.parse(uriString)
-                    Glide.with(context).load(uri).into(cartImage)
+                if (uriString.isNotEmpty()) {
+                    try {
+                        val uri = Uri.parse(uriString)
+                        Glide.with(context).load(uri).into(cartImage)
+                    } catch (e: Exception) {
+                        Log.e("CartAdapter", "Error loading image: ${e.message}")
+                        cartImage.setImageResource(android.R.drawable.ic_menu_report_image)
+                    }
+                } else {
+                    cartImage.setImageResource(android.R.drawable.ic_menu_report_image)
+                }
+                Log.d("CartAdapter", "uriString: $uriString")
                 cartItemQuantity.text = quantity.toString()
 
                 minusbutton.setOnClickListener {
@@ -110,6 +120,7 @@ class CartAdapter(
         private fun increaseQuantity(position: Int) {
             if (itemQuantities[position] < 10) {
                 itemQuantities[position]++
+                cartQuantity[position] = itemQuantities[position]
                 binding.cartItemQuantity.text = itemQuantities[position].toString()
             }
 
@@ -118,6 +129,7 @@ class CartAdapter(
         private fun deceaseQuantity(position: Int) {
             if (itemQuantities[position] > 1) {
                 itemQuantities[position]--
+                cartQuantity[position] = itemQuantities[position]
                 binding.cartItemQuantity.text = itemQuantities[position].toString()
             }
 

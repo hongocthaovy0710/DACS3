@@ -46,10 +46,47 @@ class PayOutActivity : AppCompatActivity() {
         //set userdata
         setUserData()
 
+        //get user
+        val intent = intent
+        foodItemname = intent.getStringArrayListExtra("FoodItemName") as ArrayList<String>
+        foodItemPrice = intent.getStringArrayListExtra("FoodItemPrice") as ArrayList<String>
+        foodItemImage = intent.getStringArrayListExtra("FoodItemImage") as ArrayList<String>
+        foodItemDescription = intent.getStringArrayListExtra("FoodItemDescription") as ArrayList<String>
+        foodItemIngredient = intent.getStringArrayListExtra("FoodItemIngredient") as ArrayList<String>
+        foodItemQuantities = intent.getIntegerArrayListExtra("FoodItemQuantities") as ArrayList<Int>
+
+        totalAmount = calculateTotalAmount().toString() + "$"
+//        binding.totalAmount.isEnabled = false
+        binding.totalAmount.setText(totalAmount)
+        binding.backeButton.setOnClickListener{
+            finish()
+        }
+
+
+
         binding.PlaceMyOrder.setOnClickListener{
             val bottomSheetDeialog = CongratsBottomSheet()
             bottomSheetDeialog.show(supportFragmentManager,"Test")
         }
+
+    }
+
+    private fun calculateTotalAmount(): Int {
+        var totalAmount = 0
+        for (i in 0 until foodItemPrice.size) {
+            val price = foodItemPrice[i]
+            val lastChar = price.last()
+            val priceIntVale = if (lastChar == '$') {
+                price.dropLast(1).toInt()
+            }else{
+                price.toInt()
+
+            }
+            var quantity = foodItemQuantities[i]
+            totalAmount += priceIntVale * quantity
+
+        }
+        return totalAmount
 
     }
 

@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/button8"
+            android:id="@+id/backeButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
@@ -78,7 +78,6 @@
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:inputType="text"
-                android:text="Name"
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -121,7 +120,6 @@
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:inputType="text"
-                android:text="địa chỉ"
                 android:textColor="@color/black" />
         </LinearLayout>
         <LinearLayout
@@ -161,7 +159,6 @@
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:inputType="text"
-                android:text="012569746"
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -242,7 +239,6 @@
                 android:gravity="end"
                 android:inputType="none"
                 android:paddingEnd="32dp"
-                android:text="$5"
                 android:textColor="@color/textColor"
                 android:textSize="24sp" />
         </LinearLayout>
