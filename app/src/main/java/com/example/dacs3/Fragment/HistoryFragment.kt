@@ -3,18 +3,16 @@ package com.example.dacs3.Fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.security.identity.AccessControlProfileId
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.dacs3.R
 import com.example.dacs3.adaptar.BuyAgainAdapter
 import com.example.dacs3.databinding.FragmentHistoryBinding
 import com.example.dacs3.model.OrderDetails
-import com.example.dacs3.recentOrderItems
+import com.example.dacs3.RecentOrderItems
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,7 +27,7 @@ class HistoryFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var auth: FirebaseAuth
     private lateinit var userId: String
-    private var listOfOrderItem: MutableList<OrderDetails> = mutableListOf()
+    private var listOfOrderItem: ArrayList<OrderDetails> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +56,8 @@ class HistoryFragment : Fragment() {
 
     private fun seeItemsRecentBuy() {
         listOfOrderItem.firstOrNull()?.let { recentBuy ->
-            val intent = Intent(requireContext(), recentOrderItems::class.java)
-            intent.putExtra("RecentBuyOrderItem",recentBuy)
+            val intent = Intent(requireContext(), RecentOrderItems::class.java)
+            intent.putExtra("RecentBuyOrderItem",listOfOrderItem)
             startActivity(intent)
         }
     }
@@ -143,6 +141,7 @@ class HistoryFragment : Fragment() {
         }
     }
 }
+
 
 
 
