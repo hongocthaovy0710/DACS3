@@ -36,6 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView25">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recentbuyitem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -91,21 +92,6 @@
 
 
                 </androidx.cardview.widget.CardView>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/receivedButton"
-                    android:layout_width="60dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/addtocartshape"
-                    android:fontFamily="@font/yeonsung_regular"
-                    android:text="Received"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/orderStutus"
-                    app:layout_constraintStart_toStartOf="@+id/orderStutus"
-                    app:layout_constraintTop_toBottomOf="@+id/orderStutus"
-                     />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
