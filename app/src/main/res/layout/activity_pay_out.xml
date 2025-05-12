@@ -18,8 +18,8 @@
 
         <ImageButton
             android:id="@+id/backeButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:background="@android:color/transparent"
@@ -35,7 +35,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/yeonsung_regular"
             android:text="Edit"
-            android:textColor="@color/textColor"
+            android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
