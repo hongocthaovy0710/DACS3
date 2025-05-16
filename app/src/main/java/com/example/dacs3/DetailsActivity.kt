@@ -11,56 +11,74 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class DetailsActivity : AppCompatActivity() {
+    // Khai báo các biến
     private lateinit var binding: ActivityDetailsBinding
+    private lateinit var auth: FirebaseAuth
     private var foodName: String? = null
     private var foodPrice: String? = null
     private var foodDescriptions: String? = null
     private var foodImage: String? = null
     private var foodIngredients: String? = null
-    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Khởi tạo binding
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Khởi tạo Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        //get data from intent
+        // Lấy dữ liệu từ Intent
         foodName = intent.getStringExtra("MenuItemName")
         foodPrice = intent.getStringExtra("MenuItemPrice")
         foodDescriptions = intent.getStringExtra("MenuItemDescription")
         foodImage = intent.getStringExtra("MenuItemImage")
         foodIngredients = intent.getStringExtra("MenuItemIngredients")
 
+        // Hiển thị thông tin món ăn
         with(binding) {
             detailFoodName.text = foodName
             detailDescription.text = foodDescriptions
             detailIngredients.text = foodIngredients
-            Glide.with(this@DetailsActivity).load(Uri.parse(foodImage)).into(detailFoodImage)
+            if (foodImage != null) {
+                Glide.with(this@DetailsActivity).load(Uri.parse(foodImage)).into(detailFoodImage)
+            }
         }
 
-
+        // Xử lý sự kiện nút Back
         binding.imageButton.setOnClickListener {
             finish()
         }
+
+        // Xử lý sự kiện nút Add to Cart
         binding.addItemButton.setOnClickListener {
             addItemToCart()
         }
     }
 
+    // Thêm món ăn vào giỏ hàng
     private fun addItemToCart() {
         val database = FirebaseDatabase.getInstance().reference
-        val userId = auth.currentUser?.uid?: ""
+        val userId = auth.currentUser?.uid ?: return // Thoát nếu userId null
 
-        //create a cartItem object
-        val cartItem = CartItems(foodName.toString(), foodPrice.toString(), foodDescriptions.toString(), foodImage.toString(), 1)
+        // Tạo đối tượng CartItems
+        val cartItem = CartItems(
+            foodName = foodName,
+            foodPrice = foodPrice,
+            foodDescription = foodDescriptions,
+            foodImage = foodImage,
+            foodQuantity = 1,
+            foodIngredient = foodIngredients ?: "" // Xử lý null cho foodIngredients
+        )
 
-
-        //save data to cart item to firebase database
-        database.child("user").child(userId).child("CartItems").push().setValue(cartItem).addOnSuccessListener {
-            Toast.makeText(this, "Item added to cart successfully", Toast.LENGTH_SHORT).show()
-        } .addOnFailureListener {
-            Toast.makeText(this, "Failed to add item to cart", Toast.LENGTH_SHORT).show()
-        }
+        // Lưu vào Firebase dưới node "cart > userId"
+        database.child("cart").child(userId).push().setValue(cartItem)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Item added to cart successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add item to cart", Toast.LENGTH_SHORT).show()
+            }
     }
 }
