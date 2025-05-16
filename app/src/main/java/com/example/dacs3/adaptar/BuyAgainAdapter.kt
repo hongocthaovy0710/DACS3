@@ -15,11 +15,33 @@ class BuyAgainAdapter(
     private var requireContext: Context
 ) : RecyclerView.Adapter<BuyAgainAdapter.BuyAgainViewHolder>() {
 
+    // Interface để xử lý sự kiện khi click vào nút "Buy Again"
+    interface OnBuyAgainClickListener {
+        fun onBuyAgainClick(position: Int)
+    }
+
+    // Interface để xử lý sự kiện khi click vào item
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    private var buyAgainClickListener: OnBuyAgainClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
+
+    fun setOnBuyAgainClickListener(listener: OnBuyAgainClickListener) {
+        this.buyAgainClickListener = listener
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.itemClickListener = listener
+    }
+
     override fun onBindViewHolder(holder: BuyAgainViewHolder, position: Int) {
         holder.bind(
             buyAgainFoodName[position],
             buyAgainFoodPrice[position],
-            buyAgainFoodImage[position]
+            buyAgainFoodImage[position],
+            position
         )
     }
 
@@ -33,16 +55,22 @@ class BuyAgainAdapter(
 
     inner class BuyAgainViewHolder(private val binding: BuyAgainItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(foodName: String, foodPrice: String, foodImage: String) {
+        fun bind(foodName: String, foodPrice: String, foodImage: String, position: Int) {
             binding.buyAgainFoodName.text = foodName
             binding.buyAgainFoodPrice.text = foodPrice
             val uriString = foodImage
             val uri = Uri.parse(uriString)
             Glide.with(requireContext).load(uri).into(binding.buyAgainFoodImage)
 
+            // Xử lý sự kiện khi click vào nút "Buy Again"
+            binding.buyAgainFoodButton.setOnClickListener {
+                buyAgainClickListener?.onBuyAgainClick(position)
+            }
 
+            // Xử lý sự kiện khi click vào item
+            binding.root.setOnClickListener {
+                itemClickListener?.onItemClick(position)
+            }
         }
     }
-
-
 }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dacs3.databinding.RecentBuyItemBinding
+import com.example.dacs3.databinding.BuyAgainItemBinding
 
 class RecentBuyAdapter(
     private var context: Context,
@@ -16,9 +16,19 @@ class RecentBuyAdapter(
     private var foodQuantityList: ArrayList<Int>
 ) : RecyclerView.Adapter<RecentBuyAdapter.RecentViewHolder>() {
 
+    // Interface để xử lý sự kiện khi click vào nút "Buy Again"
+    interface OnBuyAgainClickListener {
+        fun onBuyAgainClick(position: Int)
+    }
+
+    private var buyAgainClickListener: OnBuyAgainClickListener? = null
+
+    fun setOnBuyAgainClickListener(listener: OnBuyAgainClickListener) {
+        this.buyAgainClickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentViewHolder {
-        val binding = RecentBuyItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = BuyAgainItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return RecentViewHolder(binding)
     }
 
@@ -28,19 +38,30 @@ class RecentBuyAdapter(
         holder.bind(position)
     }
 
-    inner class RecentViewHolder(private val binding: RecentBuyItemBinding) :
+    inner class RecentViewHolder(private val binding: BuyAgainItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.apply {
-                foodName.text = foodNameList[position]
-                foodPrice.text = foodPriceList[position]
-                foodQuantity.text = foodQuantityList[position].toString()
-                val uriString = foodImageList[position]
-                val uri = Uri.parse(uriString)
-                Glide.with(context).load(uri).into(foodImage)
+                buyAgainFoodName.text = foodNameList[position]
+                buyAgainFoodPrice.text = foodPriceList[position]
+
+                // Hiển thị hình ảnh sử dụng Glide
+                if (position < foodImageList.size) {
+                    val uriString = foodImageList[position]
+                    try {
+                        val uri = Uri.parse(uriString)
+                        Glide.with(context).load(uri).into(buyAgainFoodImage)
+                    } catch (e: Exception) {
+                        // Xử lý nếu không thể parse URI
+                        e.printStackTrace()
+                    }
+                }
+
+                // Thêm xử lý sự kiện khi click vào nút "Buy Again"
+                buyAgainFoodButton.setOnClickListener {
+                    buyAgainClickListener?.onBuyAgainClick(adapterPosition)
+                }
             }
-
         }
-
     }
 }
