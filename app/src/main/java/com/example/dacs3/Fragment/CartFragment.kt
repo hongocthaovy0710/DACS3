@@ -62,6 +62,7 @@ class CartFragment : Fragment() {
     }
 
     // Lấy chi tiết các món trong giỏ hàng để tiến hành đặt hàng
+
     private fun getOrderItemsDetails() {
         val orderIdReference: DatabaseReference = database.reference.child("cart").child(userId)
         val foodName = mutableListOf<String>()
@@ -84,7 +85,6 @@ class CartFragment : Fragment() {
                 orderNow(foodName, foodPrice, foodImage, foodDescription, foodIngredient, foodQuantities)
             }
 
-            // Chuyển sang màn hình thanh toán
             private fun orderNow(
                 foodName: MutableList<String>,
                 foodPrice: MutableList<String>,
@@ -103,6 +103,13 @@ class CartFragment : Fragment() {
                         putExtra("FoodItemQuantities", foodQuantities as ArrayList<Int>)
                     }
                     startActivity(intent)
+
+                    // Xóa toàn bộ giỏ hàng sau khi order thành công
+                    orderIdReference.removeValue().addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Order placed successfully, cart cleared", Toast.LENGTH_SHORT).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "Failed to clear cart", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
